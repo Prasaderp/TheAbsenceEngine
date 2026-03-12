@@ -1,0 +1,14 @@
+# Python cache & compiled files
+__pycache__/
+*.py[oc]
+.pytest_cache/
+
+# Virtual environments
+venv/
+
+# Environment files
+.env
+backend/.env
+
+# Application uploads/data
+backend/uploads/

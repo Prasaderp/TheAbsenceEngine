@@ -1,0 +1,17 @@
+.wrap { display: flex; flex-direction: column; gap: 6px; }
+.label { font-size: 0.8rem; font-weight: 500; color: var(--text-2); }
+.input {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  color: var(--text);
+  font-size: 0.875rem;
+  width: 100%;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  outline: none;
+}
+.input::placeholder { color: var(--text-3); }
+.input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-dim); }
+.errored { border-color: var(--danger) !important; }
+.error { font-size: 0.75rem; color: var(--danger); }

@@ -1,0 +1,47 @@
+domain: strategy
+keywords: [competitive advantage, market share, SWOT, OKR, go-to-market, TAM, SAM, SOM, strategic initiative]
+required_sections:
+  - name: executive_summary
+    weight: 0.85
+    description: High-level overview of strategic direction
+  - name: market_analysis
+    weight: 0.9
+    description: Market size, trends, and dynamics
+  - name: competitive_landscape
+    weight: 0.95
+    description: Competitor analysis and differentiation
+  - name: strategic_objectives
+    weight: 0.95
+    description: Clear, measurable strategic goals
+  - name: resource_requirements
+    weight: 0.8
+    description: Budget, headcount, and capital needs
+  - name: risk_assessment
+    weight: 0.85
+    description: Strategic risks and contingency plans
+  - name: implementation_roadmap
+    weight: 0.8
+    description: How and when the strategy will be executed
+  - name: success_metrics
+    weight: 0.9
+    description: KPIs and measurement framework
+required_considerations:
+  - regulatory_environment
+  - technology_disruption_risk
+  - talent_acquisition_strategy
+  - exit_strategy
+  - scenario_planning
+  - customer_retention
+stakeholders:
+  - board_of_directors
+  - executive_team
+  - investors
+  - employees
+  - customers
+  - regulators
+  - partners
+temporal_considerations:
+  - 12_month_horizon
+  - 3_year_horizon
+  - market_cycle_timing
+  - competitor_response_timeline

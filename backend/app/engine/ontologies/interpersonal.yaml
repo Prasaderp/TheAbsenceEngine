@@ -1,0 +1,30 @@
+domain: interpersonal
+keywords: [feedback, growth, collaboration, 1:1, performance, relationship, team, trust, concern, recognition]
+required_sections:
+  - name: context_and_purpose
+    weight: 0.85
+    description: Why this communication is happening
+  - name: feedback_given
+    weight: 0.9
+    description: Specific, actionable feedback provided
+  - name: next_steps
+    weight: 0.9
+    description: Agreed actions and ownership
+  - name: open_questions
+    weight: 0.75
+    description: Unresolved issues requiring follow-up
+required_considerations:
+  - two_way_dialogue
+  - growth_and_development
+  - psychological_safety
+  - follow_up_timeline
+  - recognition_of_strengths
+stakeholders:
+  - meeting_participants
+  - manager
+  - direct_reports
+  - cross_functional_partners
+temporal_considerations:
+  - follow_up_date
+  - performance_review_cycle
+  - action_deadlines

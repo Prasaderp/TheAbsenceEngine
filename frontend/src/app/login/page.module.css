@@ -1,0 +1,19 @@
+.page {
+  min-height: 100vh; display: flex; align-items: center; justify-content: center;
+  background: radial-gradient(ellipse at 60% 30%, rgba(124,106,255,0.08) 0%, transparent 60%), var(--bg);
+}
+.card {
+  width: 100%; max-width: 400px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 36px;
+  box-shadow: var(--shadow-lg);
+}
+.brand { display: flex; align-items: center; gap: 10px; margin-bottom: 28px; }
+.mark { font-size: 1.6rem; color: var(--accent); }
+.wordmark { font-size: 0.9rem; font-weight: 700; color: var(--text); letter-spacing: 0.5px; text-transform: uppercase; }
+.title { font-size: 1.4rem; font-weight: 700; color: var(--text); margin-bottom: 24px; }
+.form { display: flex; flex-direction: column; gap: 16px; }
+.error { font-size: 0.8rem; color: var(--danger); }
+.switch { font-size: 0.82rem; color: var(--text-2); text-align: center; margin-top: 20px; }
+.switch a { color: var(--accent); }
+.switch a:hover { color: var(--accent-2); }

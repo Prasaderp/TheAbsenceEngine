@@ -1,0 +1,12 @@
+#prod lib
+fastapi
+pydantic
+pydantic-settings
+uvicorn[standard]
+
+
+#dev lib
+pytest
+pytest-asyncio
+httpx
+ruff

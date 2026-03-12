@@ -1,0 +1,11 @@
+.page { max-width: 800px; }
+.header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+.h1 { font-size: 1.4rem; font-weight: 700; }
+.center { display: flex; justify-content: center; padding: 40px 0; }
+.empty { color: var(--text-3); font-size: 0.875rem; }
+.table { width: 100%; border-collapse: collapse; }
+.table th { text-align: left; font-size: 0.75rem; font-weight: 600; color: var(--text-3); padding: 8px 12px; border-bottom: 1px solid var(--border); text-transform: uppercase; }
+.table td { padding: 12px; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
+.table tr:hover td { background: var(--surface); }
+.name { color: var(--text); font-weight: 500; }
+.muted { color: var(--text-3); }

@@ -1,0 +1,20 @@
+.page { max-width: 560px; }
+.h1 { font-size: 1.4rem; font-weight: 700; margin-bottom: 24px; }
+.form { display: flex; flex-direction: column; gap: 20px; }
+.field { display: flex; flex-direction: column; gap: 6px; }
+.label { font-size: 0.8rem; font-weight: 500; color: var(--text-2); }
+.select {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 10px 14px;
+  color: var(--text); font-size: 0.875rem; width: 100%;
+  outline: none; transition: border-color 0.15s;
+}
+.select:focus { border-color: var(--accent); }
+.textarea {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 10px 14px;
+  color: var(--text); font-size: 0.875rem; width: 100%; resize: vertical;
+  font-family: var(--font-mono); outline: none; transition: border-color 0.15s;
+}
+.textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-dim); }
+.actions { display: flex; gap: 12px; }

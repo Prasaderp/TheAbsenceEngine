@@ -1,0 +1,3 @@
+.layout { display: flex; min-height: 100vh; }
+.main { flex: 1; overflow-y: auto; padding: 32px 36px; }
+.center { display: flex; align-items: center; justify-content: center; height: 100vh; }

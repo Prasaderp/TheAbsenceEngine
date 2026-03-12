@@ -1,0 +1,52 @@
+domain: legal
+keywords: [WHEREAS, indemnify, governing law, termination, liability, hereinafter, covenant, warranty, jurisdiction]
+required_sections:
+  - name: scope_of_work
+    weight: 0.9
+    description: Defined scope and deliverables
+  - name: payment_terms
+    weight: 0.95
+    description: Payment schedule, amounts, and conditions
+  - name: termination_clause
+    weight: 0.9
+    description: Conditions and process for terminating the agreement
+  - name: liability_limitation
+    weight: 0.95
+    description: Limitation of liability and damages cap
+  - name: intellectual_property
+    weight: 0.85
+    description: IP ownership, licensing, and transfer
+  - name: confidentiality
+    weight: 0.8
+    description: NDA and confidential information handling
+  - name: dispute_resolution
+    weight: 0.75
+    description: Arbitration, mediation, or litigation procedures
+  - name: force_majeure
+    weight: 0.7
+    description: Events beyond reasonable control excusing performance
+  - name: amendment_procedure
+    weight: 0.65
+    description: How the agreement can be modified
+  - name: governing_law
+    weight: 0.8
+    description: Which jurisdiction's law applies
+required_considerations:
+  - vendor_bankruptcy
+  - data_breach_liability
+  - subcontractor_provisions
+  - insurance_requirements
+  - compliance_obligations
+  - renewal_terms
+  - assignment_restrictions
+stakeholders:
+  - buyer
+  - seller
+  - end_users
+  - regulators
+  - subcontractors
+temporal_considerations:
+  - contract_expiry
+  - renewal_deadline
+  - payment_milestones
+  - notice_periods

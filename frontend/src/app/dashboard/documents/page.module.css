@@ -1,0 +1,31 @@
+.page { max-width: 900px; }
+.header { margin-bottom: 24px; }
+.h1 { font-size: 1.4rem; font-weight: 700; }
+.center { display: flex; justify-content: center; padding: 40px 0; }
+.empty { color: var(--text-3); font-size: 0.875rem; padding: 24px 0; }
+.hidden { display: none; }
+
+.dropzone {
+  border: 2px dashed var(--border-2); border-radius: var(--radius-lg);
+  padding: 40px; text-align: center; cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  margin-bottom: 28px; transition: border-color 0.15s, background 0.15s;
+}
+.dropzone:hover, .dragging { border-color: var(--accent); background: var(--accent-dim); }
+.dropIcon { font-size: 1.6rem; color: var(--accent); }
+.dropText { font-size: 0.9rem; font-weight: 500; color: var(--text-2); }
+.dropSub { font-size: 0.78rem; color: var(--text-3); }
+
+.table { width: 100%; border-collapse: collapse; }
+.table th {
+  text-align: left; font-size: 0.75rem; font-weight: 600;
+  color: var(--text-3); padding: 8px 12px; border-bottom: 1px solid var(--border);
+  text-transform: uppercase; letter-spacing: 0.04em;
+}
+.table td { padding: 12px; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
+.table tr:hover td { background: var(--surface); }
+.name { color: var(--text); font-weight: 500; max-width: 280px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.muted { color: var(--text-3); }
+.actions { display: flex; gap: 8px; white-space: nowrap; }
+
+.pagination { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 20px; }

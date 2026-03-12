@@ -1,0 +1,13 @@
+.page { max-width: 900px; }
+.h1 { font-size: 1.4rem; font-weight: 700; margin-bottom: 24px; }
+.center { display: flex; justify-content: center; padding: 40px 0; }
+.empty { color: var(--text-3); font-size: 0.875rem; }
+.empty a { color: var(--accent); }
+
+.table { width: 100%; border-collapse: collapse; }
+.table th { text-align: left; font-size: 0.75rem; font-weight: 600; color: var(--text-3); padding: 8px 12px; border-bottom: 1px solid var(--border); text-transform: uppercase; letter-spacing: 0.04em; }
+.table td { padding: 12px; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
+.table tr:hover td { background: var(--surface); }
+.mono { font-family: var(--font-mono); color: var(--text-2); }
+.muted { color: var(--text-3); }
+.pagination { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 20px; }

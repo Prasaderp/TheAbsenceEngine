@@ -1,0 +1,50 @@
+domain: product
+keywords: [user story, acceptance criteria, sprint, backlog, persona, PRD, feature, MVP, release, KPI]
+required_sections:
+  - name: problem_statement
+    weight: 0.95
+    description: The problem being solved and why it matters
+  - name: user_personas
+    weight: 0.9
+    description: Target users and their needs
+  - name: success_metrics
+    weight: 0.9
+    description: Measurable outcomes defining success
+  - name: functional_requirements
+    weight: 0.95
+    description: What the product must do
+  - name: non_functional_requirements
+    weight: 0.8
+    description: Performance, security, scalability constraints
+  - name: out_of_scope
+    weight: 0.75
+    description: Explicit exclusions to prevent scope creep
+  - name: dependencies
+    weight: 0.7
+    description: External systems, teams, or decisions required
+  - name: risks_and_mitigations
+    weight: 0.8
+    description: Known risks and their mitigation plans
+  - name: timeline_and_milestones
+    weight: 0.75
+    description: Delivery schedule and key checkpoints
+required_considerations:
+  - accessibility_requirements
+  - internationalization
+  - data_privacy_compliance
+  - edge_cases_for_each_feature
+  - rollback_plan
+  - monitoring_and_alerting
+stakeholders:
+  - end_users
+  - engineering_team
+  - design_team
+  - product_manager
+  - legal_compliance
+  - customer_support
+  - sales_marketing
+temporal_considerations:
+  - launch_date
+  - beta_period
+  - deprecation_of_old_system
+  - post_launch_review

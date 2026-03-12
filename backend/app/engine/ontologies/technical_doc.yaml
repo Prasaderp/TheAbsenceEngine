@@ -1,0 +1,51 @@
+domain: technical
+keywords: [architecture, API, endpoint, schema, database, deployment, scalability, latency, SLA, RFC, ADR]
+required_sections:
+  - name: system_overview
+    weight: 0.9
+    description: High-level system architecture and purpose
+  - name: data_model
+    weight: 0.85
+    description: Data structures, schemas, and relationships
+  - name: api_contract
+    weight: 0.9
+    description: Interface definitions and contracts
+  - name: security_design
+    weight: 0.95
+    description: Authentication, authorization, and data protection
+  - name: error_handling
+    weight: 0.9
+    description: How errors are detected, logged, and surfaced
+  - name: scalability_plan
+    weight: 0.8
+    description: How the system scales under load
+  - name: deployment_strategy
+    weight: 0.75
+    description: How the system is deployed and updated
+  - name: observability
+    weight: 0.8
+    description: Logging, metrics, tracing, and alerting
+  - name: disaster_recovery
+    weight: 0.7
+    description: Backup, restore, and failover procedures
+  - name: testing_strategy
+    weight: 0.85
+    description: How the system is tested at each layer
+required_considerations:
+  - rate_limiting
+  - data_migration_plan
+  - backward_compatibility
+  - dependency_versioning
+  - performance_benchmarks
+  - incident_response
+stakeholders:
+  - backend_engineers
+  - frontend_engineers
+  - devops_sre
+  - security_team
+  - product_manager
+  - qa_engineers
+temporal_considerations:
+  - deprecation_timelines
+  - migration_windows
+  - capacity_planning_horizon
