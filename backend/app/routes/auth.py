@@ -2,16 +2,9 @@ import uuid
 from fastapi import APIRouter, Depends, status
 from fastapi.responses import Response
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.dependencies import get_db, get_current_user
+from app.dependencies import get_db, get_current_user, rate_limit_auth
 from app.models.user import User
-from app.schemas.auth import (
-    AccessTokenResponse,
-    LoginRequest,
-    RefreshRequest,
-    RegisterRequest,
-    TokenResponse,
-    UserResponse,
-)
+from app.schemas.auth import AccessTokenResponse, LoginRequest, RefreshRequest, RegisterRequest, TokenResponse, UserResponse
 from app.services import auth_service
 from app.shared.errors import NotFoundError
 
@@ -19,13 +12,17 @@ router = APIRouter()
 
 
 @router.post("/register", response_model=TokenResponse, status_code=status.HTTP_201_CREATED)
-async def register(body: RegisterRequest, db: AsyncSession = Depends(get_db)):
+async def register(body: RegisterRequest, db: AsyncSession = Depends(get_db), _rl: None = Depends(rate_limit_auth)):
     user, access, refresh = await auth_service.register(db, body.email, body.password, body.name)
     return TokenResponse(access_token=access, refresh_token=refresh)
 
 
 @router.post("/login", response_model=TokenResponse)
-async def login(body: LoginRequest, db: AsyncSession = Depends(get_db)):
+async def login(
+    body: LoginRequest,
+    db: AsyncSession = Depends(get_db),
+    _rl: None = Depends(rate_limit_auth),
+):
     _, access, refresh = await auth_service.login(db, body.email, body.password)
     return TokenResponse(access_token=access, refresh_token=refresh)
 

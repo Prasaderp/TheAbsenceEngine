@@ -41,6 +41,11 @@ class Settings(BaseSettings):
     embedding_model: str = "text-embedding-3-large"
     embedding_dimensions: int = 768
 
+    rate_limit_auth: str = "5/minute"
+    rate_limit_upload: str = "10/minute"
+    rate_limit_analysis: str = "5/minute"
+    rate_limit_general: str = "60/minute"
+
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",

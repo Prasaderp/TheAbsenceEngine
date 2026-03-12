@@ -4,14 +4,16 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from arq import create_pool
 from arq.connections import RedisSettings
+import redis.asyncio as aioredis
 from .routes import api_router
 from .config import settings
 from .shared.errors import AppError, app_error_handler, unhandled_error_handler
 from .shared.inline_queue import InlineQueue, _TASK_REGISTRY
+from .shared.middleware import RequestContextMiddleware
 
 logger = logging.getLogger(__name__)
 
-_CORS_ORIGINS = [o.strip() for o in getattr(settings, "cors_origins", "http://localhost:3000").split(",")]
+_CORS_ORIGINS = [o.strip() for o in settings.cors_origins.split(",")]
 
 
 def _register_inline_tasks() -> None:
@@ -21,6 +23,17 @@ def _register_inline_tasks() -> None:
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    # Redis client for rate limiting (best-effort — not required)
+    try:
+        redis_client = await aioredis.from_url(settings.redis_url, decode_responses=True)
+        await redis_client.ping()
+        app.state.redis = redis_client
+        logger.info("Redis connected for rate limiting.")
+    except Exception as exc:
+        app.state.redis = None
+        logger.warning("Redis unavailable — rate limiting disabled. Error: %s", exc)
+
+    # arq job queue
     try:
         base = RedisSettings.from_dsn(settings.redis_url)
         probe = RedisSettings(
@@ -46,9 +59,13 @@ async def lifespan(app: FastAPI):
             logger.warning(
                 "Redis unavailable — using in-process inline queue (dev only). Error: %s", exc
             )
+
     yield
+
     if app.state.arq is not None:
         await app.state.arq.aclose()
+    if app.state.redis is not None:
+        await app.state.redis.aclose()
 
 
 def create_app() -> FastAPI:
@@ -59,15 +76,16 @@ def create_app() -> FastAPI:
         lifespan=lifespan,
     )
 
-    # CORS — must be first middleware so preflight OPTIONS requests are handled
+    # Middleware order: outermost first (CORS handles preflight before anything else)
     app.add_middleware(
         CORSMiddleware,
         allow_origins=_CORS_ORIGINS,
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
-        expose_headers=["X-Request-ID"],
+        expose_headers=["X-Request-ID", "X-Response-Time-Ms"],
     )
+    app.add_middleware(RequestContextMiddleware)
 
     app.add_exception_handler(AppError, app_error_handler)
     app.add_exception_handler(Exception, unhandled_error_handler)
@@ -76,3 +94,4 @@ def create_app() -> FastAPI:
 
 
 app = create_app()
+

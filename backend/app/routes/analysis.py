@@ -3,7 +3,7 @@ import json
 import uuid
 from fastapi import APIRouter, Depends, Query, WebSocket, WebSocketDisconnect, status
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.dependencies import get_db, get_current_user, get_arq_pool
+from app.dependencies import get_db, get_current_user, get_arq_pool, rate_limit_analysis
 from app.schemas.analysis import AnalysisRequest, JobStatusResponse, JobListResponse
 from app.schemas.report import ReportResponse, AbsenceItemResponse
 from app.services import analysis_service, report_service
@@ -19,6 +19,7 @@ async def submit_analysis(
     db: AsyncSession = Depends(get_db),
     user_id: uuid.UUID = Depends(get_current_user),
     arq=Depends(get_arq_pool),
+    _rl: None = Depends(rate_limit_analysis),
 ):
     job = await analysis_service.submit_job(
         db, user_id, body.document_id, body.idempotency_key,
