@@ -30,7 +30,7 @@
 ---
 
 <!-- DEMO VIDEO PLACEHOLDER -->
-> **📽 Demo** — [Watch a full walkthrough](https://youtu.be/DEMO_LINK_HERE) *(replace with your recorded demo)*
+> **📽 Demo** — [Watch a full walkthrough](https://youtu.be/DEMO_LINK_HERE) *
 
 ---
 
