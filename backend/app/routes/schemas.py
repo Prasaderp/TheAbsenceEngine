@@ -27,7 +27,7 @@ async def list_schemas(
     user_id: uuid.UUID = Depends(get_current_user),
 ):
     schemas, meta = await schema_service.list_schemas(db, user_id, page, per_page)
-    return SchemaListResponse(data=[SchemaResponse.model_validate(s) for s in schemas], meta=meta.model_dump())
+    return SchemaListResponse(data=[SchemaResponse.model_validate(s) for s in schemas], meta=meta)
 
 
 @router.get("/{schema_id}", response_model=SchemaResponse)

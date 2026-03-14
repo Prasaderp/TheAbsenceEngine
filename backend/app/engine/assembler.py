@@ -1,19 +1,31 @@
 from __future__ import annotations
-import math
 from app.engine.detectors.base import AbsenceCandidate
 from app.engine.embedder import cosine_similarity
 from app.engine.llm.gateway import LLMGateway
 from app.engine.llm.prompts import SUGGEST_COMPLETION
+from app.shared.logger import get_logger
+
+log = get_logger(__name__)
 
 _DEDUP_THRESHOLD = 0.85
 _MAX_ITEMS = 25
+_SUGGESTION_COUNT = 5
+
+_TYPE_SEVERITY: dict[str, float] = {
+    "coverage_gap": 0.85,
+    "logical_implication": 0.80,
+    "stakeholder_gap": 0.75,
+    "temporal_gap": 0.70,
+    "structural_gap": 0.65,
+    "emotional_relational": 0.50,
+}
 
 
-def _risk(candidate: AbsenceCandidate) -> float:
-    return round(
-        (candidate.risk_score * 0.4) + (candidate.confidence * 0.4) + (0.2 * (1.0 if candidate.absence_type == "coverage_gap" else 0.6)),
-        3,
-    )
+def _compute_risk(candidate: AbsenceCandidate) -> float:
+    """Risk = (raw_risk × 0.35) + (confidence × 0.35) + (type_severity × 0.30)"""
+    type_sev = _TYPE_SEVERITY.get(candidate.absence_type, 0.5)
+    raw = (candidate.risk_score * 0.35) + (candidate.confidence * 0.35) + (type_sev * 0.30)
+    return round(max(0.0, min(1.0, raw)), 3)
 
 
 def _deduplicate(
@@ -21,7 +33,7 @@ def _deduplicate(
     embeddings: dict[int, list[float]],
 ) -> list[AbsenceCandidate]:
     kept: list[int] = []
-    for i, _ in enumerate(candidates):
+    for i in range(len(candidates)):
         merge = False
         for j in kept:
             if i in embeddings and j in embeddings:
@@ -52,10 +64,10 @@ async def assemble(
         emb_map = {}
 
     deduped = _deduplicate(candidates, emb_map)
-    deduped.sort(key=lambda c: _risk(c), reverse=True)
+    deduped.sort(key=lambda c: _compute_risk(c), reverse=True)
     deduped = deduped[:_MAX_ITEMS]
 
-    for item in deduped[:5]:
+    for item in deduped[:_SUGGESTION_COUNT]:
         try:
             prompt = SUGGEST_COMPLETION.format(
                 excerpt=document_text[:2000],
@@ -64,13 +76,11 @@ async def assemble(
             )
             resp = await llm.generate(prompt, max_tokens=512)
             item.suggested_completion = resp.text.strip()
-        except Exception:
-            pass
+        except Exception as exc:
+            log.warning("suggestion generation failed", extra={"title": item.title, "error": str(exc)})
 
-    overall_risk = round(
-        sum(_risk(c) * c.confidence for c in deduped) / max(len(deduped), 1),
-        3,
-    )
+    risks = [_compute_risk(c) for c in deduped]
+    overall_risk = round(sum(risks) / max(len(risks), 1), 3)
 
     item_count = len(deduped)
     summary = (
@@ -89,7 +99,7 @@ async def assemble(
                 "description": c.description,
                 "reasoning": c.reasoning,
                 "confidence": c.confidence,
-                "risk_score": _risk(c),
+                "risk_score": _compute_risk(c),
                 "evidence": c.evidence,
                 "suggested_completion": c.suggested_completion,
             }

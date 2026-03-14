@@ -10,6 +10,7 @@ async def create_schema(db: AsyncSession, user_id: uuid.UUID, name: str, domain:
     schema = CustomSchema(user_id=user_id, name=name, domain=domain, schema_definition=schema_definition)
     db.add(schema)
     await db.flush()
+    await db.refresh(schema)
     return schema
 
 
@@ -34,6 +35,7 @@ async def update_schema(db: AsyncSession, user_id: uuid.UUID, schema_id: uuid.UU
         if v is not None:
             setattr(s, k, v)
     await db.flush()
+    await db.refresh(s)
     return s
 
 

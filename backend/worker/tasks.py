@@ -1,4 +1,5 @@
 import uuid
+from datetime import datetime, timezone
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.pool import NullPool
 from app.config import settings
@@ -27,6 +28,7 @@ async def run_analysis(ctx: dict, job_id: str) -> None:
             return
 
         job.status = "processing"
+        job.started_at = datetime.now(timezone.utc)
         await session.commit()
         log.info("analysis started", extra={"job_id": job_id})
 
@@ -68,10 +70,12 @@ async def run_analysis(ctx: dict, job_id: str) -> None:
                 )
 
             job.status = "completed"
+            job.completed_at = datetime.now(timezone.utc)
             log.info("analysis completed", extra={"job_id": job_id, "items": len(report_data.get("items", []))})
 
         except Exception as exc:
             job.status = "failed"
+            job.completed_at = datetime.now(timezone.utc)
             job.error_message = str(exc)[:500]
             log.error("analysis failed", extra={"job_id": job_id, "error": str(exc)})
         finally:

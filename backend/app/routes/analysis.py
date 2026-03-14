@@ -38,7 +38,7 @@ async def list_jobs(
     jobs, meta = await analysis_service.list_jobs(db, user_id, page, per_page)
     return JobListResponse(
         data=[JobStatusResponse.model_validate(j) for j in jobs],
-        meta=meta.model_dump(),
+        meta=meta,
     )
 
 
@@ -68,10 +68,12 @@ async def get_job_report(
 async def stream_job(
     job_id: uuid.UUID,
     websocket: WebSocket,
-    token: str,
+    token: str | None = None,
 ):
+    if not token:
+        await websocket.close(code=4001)
+        return
 
-    # Authenticate before accepting to avoid keeping rejected connections alive
     try:
         user_id = security.decode_access_token(token)
     except ValueError:
@@ -82,8 +84,8 @@ async def stream_job(
 
     terminal = {"completed", "failed"}
     try:
-        async with AsyncSessionLocal() as db:
-            while True:
+        while True:
+            async with AsyncSessionLocal() as db:
                 try:
                     job = await analysis_service.get_job(db, user_id, job_id)
                 except Exception:
@@ -99,6 +101,6 @@ async def stream_job(
                 if job.status in terminal:
                     break
 
-                await asyncio.sleep(2)
+            await asyncio.sleep(2)
     except WebSocketDisconnect:
         pass

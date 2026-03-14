@@ -1,12 +1,12 @@
-from sqlalchemy import String, Text
+import uuid
+from sqlalchemy import String
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column
 from app.shared.db import Base
-from app.models.base import UUIDPrimaryKeyMixin, TimestampMixin
-import uuid
+from app.models.base import UUIDPrimaryKeyMixin, TimestampMixin, UpdatedAtMixin
 
 
-class CustomSchema(Base, UUIDPrimaryKeyMixin, TimestampMixin):
+class CustomSchema(Base, UUIDPrimaryKeyMixin, TimestampMixin, UpdatedAtMixin):
     __tablename__ = "custom_schemas"
 
     user_id: Mapped[uuid.UUID] = mapped_column(nullable=False, index=True)

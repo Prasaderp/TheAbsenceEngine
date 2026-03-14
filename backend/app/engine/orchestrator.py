@@ -28,14 +28,17 @@ async def run_pipeline(
 
     parser = get_parser(mime_type)
     parsed = await parser.parse(file_data, mime_type)
+    if not parsed.text.strip():
+        return {"summary": "Document is empty — no analysis possible.", "overall_risk_score": 0.0, "items": []}
+
     log.info("parsed document", extra={"chars": len(parsed.text), "mime": mime_type})
 
     chunks = chunk_text(parsed.text)
+    embedded = []
     try:
         embedded = await embed_chunks(chunks, llm)
-    except Exception:
-        embedded = []
-        log.warning("embedding failed, proceeding without embeddings")
+    except Exception as exc:
+        log.warning("embedding failed, proceeding without embeddings", extra={"error": str(exc)})
 
     domain, confidence = await classify_domain(parsed.text, llm, domain_override)
     log.info("classified domain", extra={"domain": domain, "confidence": confidence})
@@ -53,11 +56,11 @@ async def run_pipeline(
     results = await asyncio.gather(*[d.detect(ctx) for d in _DETECTORS], return_exceptions=True)
 
     candidates = []
-    for r in results:
+    for i, r in enumerate(results):
         if isinstance(r, list):
             candidates.extend(r)
-        else:
-            log.warning("detector error", extra={"error": str(r)})
+        elif isinstance(r, BaseException):
+            log.warning("detector failed", extra={"detector": _DETECTORS[i].__class__.__name__, "error": str(r)})
 
     report = await assemble(candidates, parsed.text, llm)
     report["domain_detected"] = domain

@@ -1,6 +1,7 @@
 import uuid
 from datetime import datetime
 from pydantic import BaseModel, ConfigDict, Field
+from app.shared.pagination import PageMeta
 
 
 class SchemaCreateRequest(BaseModel):
@@ -32,4 +33,4 @@ class SchemaResponse(BaseModel):
 
 class SchemaListResponse(BaseModel):
     data: list[SchemaResponse]
-    meta: dict
+    meta: PageMeta

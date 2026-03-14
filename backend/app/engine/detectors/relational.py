@@ -3,7 +3,10 @@ from pydantic import BaseModel
 from app.engine.detectors.base import BaseDetector, DetectionContext, AbsenceCandidate
 from app.engine.llm.prompts import RELATIONAL_EXTRACT
 
-_CONFIDENCE_DISCOUNT = 0.8
+_PRIMARY_DOMAINS = {"interpersonal", "strategy", "product"}
+_PRIMARY_DISCOUNT = 0.85
+_SECONDARY_DISCOUNT = 0.60
+_MAX_GAPS = 8
 
 
 class _RelationalGap(BaseModel):
@@ -18,13 +21,11 @@ class _RelationalResult(BaseModel):
 
 
 class RelationalDetector(BaseDetector):
-    """Beta detector — confidence discounted 20%."""
+    """Beta detector — confidence discounted for all domains, more for non-primary."""
 
     async def detect(self, ctx: DetectionContext) -> list[AbsenceCandidate]:
-        if ctx.domain not in {"interpersonal", "strategy", "product"}:
-            return []
-
-        prompt = RELATIONAL_EXTRACT.format(text=ctx.document.text[:10000])
+        discount = _PRIMARY_DISCOUNT if ctx.domain in _PRIMARY_DOMAINS else _SECONDARY_DISCOUNT
+        prompt = RELATIONAL_EXTRACT.format(text=ctx.document.text[:12000])
 
         try:
             result = await ctx.llm.generate_structured(prompt, _RelationalResult)
@@ -32,15 +33,15 @@ class RelationalDetector(BaseDetector):
             return []
 
         candidates: list[AbsenceCandidate] = []
-        for gap in result.gaps[:6]:
-            sev = max(0.0, min(1.0, gap.severity)) * _CONFIDENCE_DISCOUNT
+        for gap in result.gaps[:_MAX_GAPS]:
+            sev = max(0.0, min(1.0, gap.severity)) * discount
             candidates.append(
                 AbsenceCandidate(
                     title=f"Relational gap: {gap.entity} — {gap.missing_dimension}",
                     description=gap.description,
-                    reasoning=f"Entity '{gap.entity}' lacks {gap.missing_dimension} framing. (beta detector, confidence discounted)",
+                    reasoning=f"Entity '{gap.entity}' lacks '{gap.missing_dimension}' framing. (beta detector, discount={discount})",
                     confidence=round(sev, 3),
-                    risk_score=round(sev * 0.7, 3),
+                    risk_score=round(sev * 0.75, 3),
                     absence_type="emotional_relational",
                     category="relational",
                     evidence=[{"type": "relational_analysis", "detail": gap.description}],

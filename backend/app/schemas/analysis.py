@@ -1,7 +1,7 @@
 import uuid
 from datetime import datetime
 from pydantic import BaseModel, ConfigDict, Field
-
+from app.shared.pagination import PageMeta
 
 VALID_STATUSES = {"pending", "processing", "completed", "failed"}
 VALID_DOMAINS = {"legal", "product", "strategy", "technical", "interpersonal", "general"}
@@ -10,7 +10,7 @@ VALID_DOMAINS = {"legal", "product", "strategy", "technical", "interpersonal", "
 class AnalysisRequest(BaseModel):
     document_id: uuid.UUID
     idempotency_key: str = Field(min_length=8, max_length=64)
-    domain_override: str | None = Field(None)
+    domain_override: str | None = Field(None, pattern=r"^(legal|product|strategy|technical|interpersonal|general)$")
     custom_schema_id: uuid.UUID | None = None
 
     model_config = ConfigDict(extra="forbid")
@@ -23,10 +23,12 @@ class JobStatusResponse(BaseModel):
     document_id: uuid.UUID
     status: str
     domain_override: str | None
+    started_at: datetime | None
+    completed_at: datetime | None
     error_message: str | None
     created_at: datetime
 
 
 class JobListResponse(BaseModel):
     data: list[JobStatusResponse]
-    meta: dict
+    meta: PageMeta

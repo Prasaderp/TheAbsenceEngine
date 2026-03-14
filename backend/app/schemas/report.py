@@ -1,6 +1,7 @@
 import uuid
 from datetime import datetime
 from pydantic import BaseModel, ConfigDict
+from app.shared.pagination import PageMeta
 
 
 class AbsenceItemResponse(BaseModel):
@@ -14,7 +15,7 @@ class AbsenceItemResponse(BaseModel):
     confidence: float
     risk_score: float
     absence_type: str
-    evidence: list
+    evidence: list[dict]
     suggested_completion: str | None
     sort_order: int
 
@@ -35,4 +36,4 @@ class ReportResponse(BaseModel):
 
 class ReportListResponse(BaseModel):
     data: list[ReportResponse]
-    meta: dict
+    meta: PageMeta

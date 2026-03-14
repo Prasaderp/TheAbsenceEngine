@@ -18,7 +18,7 @@ async def list_reports(
     reports, meta = await report_service.list_reports(db, user_id, page, per_page)
     return ReportListResponse(
         data=[ReportResponse.model_validate(r) for r in reports],
-        meta=meta.model_dump(),
+        meta=meta,
     )
 
 
@@ -37,11 +37,11 @@ async def get_report(
 @router.get("/{report_id}/export")
 async def export_report(
     report_id: uuid.UUID,
-    fmt: str = Query("json", pattern="^(json|pdf)$"),
+    format: str = Query("json", pattern="^(json|pdf)$"),
     db: AsyncSession = Depends(get_db),
     user_id: uuid.UUID = Depends(get_current_user),
 ):
-    if fmt == "pdf":
+    if format == "pdf":
         data = await report_service.export_pdf(db, user_id, report_id)
         return Response(content=data, media_type="application/pdf",
                         headers={"Content-Disposition": f'attachment; filename="report-{report_id}.pdf"'})
